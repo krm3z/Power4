@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"power4/logic"
 )
 
+// Fonction pour afficher un template
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	path := fmt.Sprintf("templates/%s.html", tmpl)
 	t, err := template.ParseFiles(path)
@@ -15,6 +17,8 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	}
 	t.Execute(w, data)
 }
+
+// -------------------- Handlers --------------------
 
 func indexHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "index", nil)
@@ -37,8 +41,11 @@ func settingsHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func gameHandler(w http.ResponseWriter, r *http.Request) {
-	renderTemplate(w, "game", nil)
+	game := logic.NewGame() // pour plus tard
+	renderTemplate(w, "game", game)
 }
+
+// -------------------- Main --------------------
 
 func main() {
 	fs := http.FileServer(http.Dir("static"))
