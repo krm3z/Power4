@@ -2,11 +2,22 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Puissance 4</title>
+  <title>Mode Bot - Puissance 4</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
-<h1>Choix du Bot</h1>
-<a href="/play"><button class="btn">Easy</button></a>
-<a href="/play"><button class="btn">Medium</button></a>
-<a href="/play"><button class="btn">Hard</button></a>
-<a href="/play"><button class="btn">Expert</button></a>
+<body class="bot-page">
+  <div class="bot-container">
+    <h1 class="title">MODE BOT 🤖</h1>
+    <p class="subtitle">Choisis la difficulté du robot :</p>
+
+    <div class="bot-buttons">
+      <a href="/play?level=easy" class="bot-btn easy">Easy 😁</a>
+      <a href="/play?level=medium" class="bot-btn medium">Medium 😑</a>
+      <a href="/play?level=hard" class="bot-btn hard">Hard 😡</a>
+      <a href="/play?level=god" class="bot-btn god">Impossible 💀</a>
+    </div>
+
+    <a href="/menu" class="back-btn">⬅ Retour au menu</a>
+  </div>
+</body>
+</html>
