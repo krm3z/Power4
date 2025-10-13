@@ -1,3 +1,42 @@
-<h1>Zone de Jeu (Grille)</h1>
-<p>La grille apparaîtra ici bientôt.</p>
-<a href="/menu">Retour au menu</a>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Puissance 4 - Gameplay</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="game-page">
+  <div class="game-container">
+    <h1 class="title">Puissance 4 - BOT ({{.Level}}) 🤖</h1>
+
+    {{if .GameOver}}
+      <h2 class="winner">
+        {{if eq .Winner "R"}}🔴 Joueur GAGNE ! 🏆{{else if eq .Winner "Y"}}🟡 BOT GAGNE ! 💀{{else}}Match nul 🤝{{end}}
+      </h2>
+      <a href="/play?level={{.LevelRaw}}" class="restart-btn">Rejouer 🔁</a>
+      <a href="/menu" class="back-btn">⬅ Retour au menu</a>
+    {{else}}
+      <h3 class="subtitle">Tour actuel : {{.Current}}</h3>
+
+      <div class="grid">
+        {{range $i, $row := .Grid}}
+          <div class="row">
+            {{range $j, $cell := $row}}
+              <form action="/play?level={{$.LevelRaw}}" method="POST" style="display:inline;">
+                <input type="hidden" name="col" value="{{$j}}">
+                <button type="submit" class="cell" {{if ne $.Current "R"}}disabled{{end}}>
+                  {{if eq $cell "R"}}<div class="disc red"></div>
+                  {{else if eq $cell "Y"}}<div class="disc yellow"></div>
+                  {{else}}<div class="disc empty"></div>{{end}}
+                </button>
+              </form>
+            {{end}}
+          </div>
+        {{end}}
+      </div>
+
+      <a href="/menu" class="back-btn">⬅ Retour au menu</a>
+    {{end}}
+  </div>
+</body>
+</html>
