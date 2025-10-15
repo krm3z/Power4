@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Puissance 4 - Mode BOT</title>
+  <title>Puissance 4 - 2 Joueurs</title>
   <link rel="stylesheet" href="/static/style.css">
 </head>
 <body class="game-page">
   <div class="game-container">
-    <h1 class="title">Puissance 4 - Mode {{.Level}} 🤖</h1>
+    <h1 class="title">Puissance 4 - 🔴 {{.Player1}} vs 🟡 {{.Player2}}</h1>
 
     {{if .GameOver}}
       <div class="victory-screen">
@@ -15,28 +15,36 @@
           <div class="trophy">🏆</div>
 
           <h2 class="winner-text">
-            {{if eq .Winner "R"}}🔴 Joueur GAGNE ! 🎉
-            {{else if eq .Winner "Y"}}🟡 BOT GAGNE ! 💀
-            {{else}}🤝 Match nul !
+            {{if eq .Winner "R"}}🔴 
+              {{if .Player1}}{{.Player1}}{{else}}Joueur{{end}} 
+              GAGNE ! 🎉
+            {{else if eq .Winner "Y"}}🟡 
+              {{if .Player2}}{{.Player2}}{{else}}BOT{{end}} 
+              GAGNE ! 💛
+            {{else}}
+              🤝 Match nul !
             {{end}}
           </h2>
 
           <div class="victory-buttons">
-            <a href="/play?level={{.LevelRaw}}" class="restart-btn">🔁 Rejouer une partie</a>
+            <a href="/local" class="restart-btn">🔁 Rejouer une partie</a>
             <a href="/menu" class="menu-btn">🏠 Retour au menu</a>
           </div>
         </div>
       </div>
     {{else}}
-      <h3 class="subtitle">Tour actuel : {{.Current}}</h3>
+      <h3 class="subtitle">
+        Tour actuel :
+        {{if eq .Current "R"}}🔴 {{.Player1}}{{else}}🟡 {{.Player2}}{{end}}
+      </h3>
 
       <div class="grid">
         {{range $i, $row := .Grid}}
           <div class="row">
             {{range $j, $cell := $row}}
-              <form action="/play?level={{$.LevelRaw}}" method="POST" style="display:inline;">
+              <form action="/local-game?player1={{$.Player1}}&player2={{$.Player2}}" method="POST" style="display:inline;">
                 <input type="hidden" name="col" value="{{$j}}">
-                <button type="submit" class="cell" {{if ne $.Current "R"}}disabled{{end}}>
+                <button type="submit" class="cell">
                   {{if eq $cell "R"}}<span class="disc red"></span>
                   {{else if eq $cell "Y"}}<span class="disc yellow"></span>
                   {{else}}<span class="disc empty"></span>{{end}}

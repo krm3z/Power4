@@ -1,5 +1,12 @@
 package logic
 
+// --- STRUCTURES ---
+
+type WinPos struct {
+	Row int
+	Col int
+}
+
 type Game struct {
 	Grid      [][]string
 	Rows      int
@@ -7,9 +14,10 @@ type Game struct {
 	Current   string
 	Winner    string
 	GameOver  bool
+	WinCells  []WinPos // ⬅️ cellules gagnantes
 }
 
-// Création d'une grille personnalisée
+// --- CRÉATION D'UNE GRILLE PERSONNALISÉE ---
 func NewGameCustom(rows, cols int) *Game {
 	grid := make([][]string, rows)
 	for i := range grid {
@@ -27,7 +35,7 @@ func NewGameCustom(rows, cols int) *Game {
 	}
 }
 
-// Jouer un pion dans une colonne
+// --- JOUER UN PION ---
 func (g *Game) Play(col int) bool {
 	if col < 0 || col >= g.Columns || g.GameOver {
 		return false
@@ -50,7 +58,7 @@ func (g *Game) Play(col int) bool {
 	return false
 }
 
-// Vérifie s’il y a un gagnant
+// --- DÉTECTION DE VICTOIRE ---
 func (g *Game) checkWin() {
 	dirs := [][2]int{{1, 0}, {0, 1}, {1, 1}, {1, -1}}
 
@@ -62,6 +70,7 @@ func (g *Game) checkWin() {
 			}
 			for _, d := range dirs {
 				count := 1
+				winCells := []WinPos{{r, c}}
 				for k := 1; k < 4; k++ {
 					nr := r + d[0]*k
 					nc := c + d[1]*k
@@ -70,6 +79,7 @@ func (g *Game) checkWin() {
 					}
 					if g.Grid[nr][nc] == player {
 						count++
+						winCells = append(winCells, WinPos{nr, nc})
 					} else {
 						break
 					}
@@ -77,26 +87,15 @@ func (g *Game) checkWin() {
 				if count >= 4 {
 					g.Winner = player
 					g.GameOver = true
+					g.WinCells = winCells
 					return
 				}
 			}
 		}
 	}
-
-	// Vérifie s’il n’y a plus de place
-	full := true
-	for c := 0; c < g.Columns; c++ {
-		if g.Grid[0][c] == "⚪" {
-			full = false
-			break
-		}
-	}
-	if full {
-		g.GameOver = true
-	}
 }
 
-// Clone profond du plateau
+// --- CLONE DU PLATEAU ---
 func (g *Game) Clone() *Game {
 	newGrid := make([][]string, g.Rows)
 	for i := range g.Grid {
@@ -110,10 +109,11 @@ func (g *Game) Clone() *Game {
 		Current:  g.Current,
 		Winner:   g.Winner,
 		GameOver: g.GameOver,
+		WinCells: append([]WinPos{}, g.WinCells...), // copie profonde
 	}
 }
 
-// Évaluation de la position (pour IA)
+// --- ÉVALUATION POUR L’IA ---
 func (g *Game) Evaluate() int {
 	score := 0
 	rows, cols := g.Rows, g.Columns
@@ -142,32 +142,32 @@ func (g *Game) Evaluate() int {
 		return 0
 	}
 
+	// horizontale
 	for r := 0; r < rows; r++ {
 		for c := 0; c < cols-3; c++ {
 			score += checkWindow(g.Grid[r][c : c+4])
 		}
 	}
-
+	// verticale
 	for c := 0; c < cols; c++ {
 		for r := 0; r < rows-3; r++ {
 			window := []string{g.Grid[r][c], g.Grid[r+1][c], g.Grid[r+2][c], g.Grid[r+3][c]}
 			score += checkWindow(window)
 		}
 	}
-
+	// diagonale /
 	for r := 3; r < rows; r++ {
 		for c := 0; c < cols-3; c++ {
 			window := []string{g.Grid[r][c], g.Grid[r-1][c+1], g.Grid[r-2][c+2], g.Grid[r-3][c+3]}
 			score += checkWindow(window)
 		}
 	}
-
+	// diagonale \
 	for r := 0; r < rows-3; r++ {
 		for c := 0; c < cols-3; c++ {
 			window := []string{g.Grid[r][c], g.Grid[r+1][c+1], g.Grid[r+2][c+2], g.Grid[r+3][c+3]}
 			score += checkWindow(window)
 		}
 	}
-
 	return score
 }

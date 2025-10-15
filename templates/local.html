@@ -8,9 +8,9 @@
 <body class="local-page">
   <div class="local-container">
     <h1 class="title">MODE 2 JOUEURS 👥</h1>
-    <p class="subtitle">Entre le nom des deux joueurs :</p>
+    <p class="subtitle">Entre les noms et choisis la difficulté :</p>
 
-    <form class="players-form" action="/play" method="GET">
+    <form class="players-form" action="/local-game" method="GET">
       <div class="input-group">
         <label for="player1">Joueur 1 🔴</label>
         <input type="text" id="player1" name="player1" placeholder="Nom du joueur 1" required>
@@ -19,6 +19,15 @@
       <div class="input-group">
         <label for="player2">Joueur 2 🟡</label>
         <input type="text" id="player2" name="player2" placeholder="Nom du joueur 2" required>
+      </div>
+
+      <div class="input-group">
+        <label for="level">Difficulté 🎯</label>
+        <select id="level" name="level" required>
+          <option value="easy">Facile (6x7)</option>
+          <option value="normal">Moyen (6x9)</option>
+          <option value="hard">Difficile (7x8)</option>
+        </select>
       </div>
 
       <button type="submit" class="start-btn">Commencer la partie 🎮</button>
