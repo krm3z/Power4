@@ -14,7 +14,6 @@ import (
 var currentGame *logic.Game
 var currentLevel string
 
-// ========== TEMPLATE ==========
 func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	path := fmt.Sprintf("templates/%s.html", tmpl)
 	t, err := template.ParseFiles(path)
@@ -25,13 +24,11 @@ func renderTemplate(w http.ResponseWriter, tmpl string, data interface{}) {
 	t.Execute(w, data)
 }
 
-// ========== PAGES ==========
 func indexHandler(w http.ResponseWriter, r *http.Request) { renderTemplate(w, "index", nil) }
 func menuHandler(w http.ResponseWriter, r *http.Request)  { renderTemplate(w, "menu", nil) }
 func botHandler(w http.ResponseWriter, r *http.Request)   { renderTemplate(w, "bot", nil) }
 func localHandler(w http.ResponseWriter, r *http.Request) { renderTemplate(w, "local", nil) }
 
-// ========== INITIALISATION DU JEU ==========
 func initGame(level string) {
 	level = strings.ToLower(level)
 	switch level {
@@ -51,7 +48,6 @@ func initGame(level string) {
 	fmt.Printf("🎮 Nouvelle partie : %s (%dx%d)\n", strings.Title(level), currentGame.Rows, currentGame.Columns)
 }
 
-// ========== MODE BOT ==========
 func gameHandler(w http.ResponseWriter, r *http.Request) {
 	level := strings.ToLower(r.URL.Query().Get("level"))
 	if currentGame == nil {
@@ -85,7 +81,6 @@ func gameHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "game", data)
 }
 
-// ========== IA DU BOT ==========
 func botMove(level string) {
 	if currentGame == nil || currentGame.GameOver {
 		return
@@ -103,7 +98,6 @@ func botMove(level string) {
 				break
 			}
 		}
-
 	case "normal":
 		if rand.Float64() < 0.6 {
 			for c := 0; c < cols; c++ {
@@ -121,7 +115,6 @@ func botMove(level string) {
 				break
 			}
 		}
-
 	case "hard":
 		bestScore := math.Inf(-1)
 		bestCol := -1
@@ -140,7 +133,6 @@ func botMove(level string) {
 			bestCol = rand.Intn(cols)
 		}
 		currentGame.Play(bestCol)
-
 	case "god":
 		bestScore := math.Inf(-1)
 		bestCol := -1
@@ -195,7 +187,6 @@ func minimax(g *logic.Game, depth int, isMax bool) float64 {
 	}
 }
 
-// ========== MODE LOCAL ==========
 func localGameHandler(w http.ResponseWriter, r *http.Request) {
 	player1 := r.URL.Query().Get("player1")
 	player2 := r.URL.Query().Get("player2")
@@ -240,18 +231,16 @@ func localGameHandler(w http.ResponseWriter, r *http.Request) {
 	renderTemplate(w, "local-game", data)
 }
 
-// ========== MAIN ==========
 func main() {
 	fs := http.FileServer(http.Dir("static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))
-
 	http.HandleFunc("/", indexHandler)
 	http.HandleFunc("/menu", menuHandler)
 	http.HandleFunc("/bot", botHandler)
 	http.HandleFunc("/play", gameHandler)
 	http.HandleFunc("/local", localHandler)
 	http.HandleFunc("/local-game", localGameHandler)
-
 	fmt.Println("✅ Serveur Power4 sur :8080")
 	http.ListenAndServe(":8080", nil)
 }
+

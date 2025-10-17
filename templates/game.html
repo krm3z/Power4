@@ -10,47 +10,42 @@
     <h1 class="title">Puissance 4 - Mode {{.Level}} 🤖</h1>
 
     {{if .GameOver}}
-      <div class="victory-screen">
-        <div class="victory-card">
-          <div class="trophy">🏆</div>
-
-          <h2 class="winner-text">
-            {{if eq .Winner "R"}}🔴 Joueur GAGNE ! 🎉
-            {{else if eq .Winner "Y"}}🟡 BOT GAGNE ! 💀
-            {{else}}🤝 Match nul !
-            {{end}}
-          </h2>
-
-          <div class="victory-buttons">
-            <a href="/play?level={{.LevelRaw}}" class="restart-btn">🔁 Rejouer une partie</a>
-            <a href="/menu" class="menu-btn">🏠 Retour au menu</a>
-          </div>
+    <div class="victory-screen">
+      <div class="victory-card">
+        <div class="trophy">🏆</div>
+        <h2 class="winner-text">
+          {{if eq .Winner "R"}}🔴 Joueur GAGNE ! 🎉
+          {{else if eq .Winner "Y"}}🟡 BOT GAGNE ! 💀
+          {{else}}🤝 Match nul !
+          {{end}}
+        </h2>
+        <div class="victory-buttons">
+          <a href="/play?level={{.LevelRaw}}" class="restart-btn">🔁 Rejouer une partie</a>
+          <a href="/menu" class="menu-btn">🏠 Retour au menu</a>
         </div>
       </div>
+    </div>
     {{else}}
-      <h3 class="subtitle">Tour actuel : {{.Current}}</h3>
-
-      <div class="grid">
-        {{range $i, $row := .Grid}}
-          <div class="row">
-            {{range $j, $cell := $row}}
-              <form action="/play?level={{$.LevelRaw}}" method="POST" style="display:inline;">
-                <input type="hidden" name="col" value="{{$j}}">
-                <button type="submit" class="cell" {{if ne $.Current "R"}}disabled{{end}}>
-                  {{if eq $cell "R"}}<span class="disc red"></span>
-                  {{else if eq $cell "Y"}}<span class="disc yellow"></span>
-                  {{else}}<span class="disc empty"></span>{{end}}
-                </button>
-              </form>
-            {{end}}
-          </div>
+    <h3 class="subtitle">Tour actuel : {{.Current}}</h3>
+    <div class="grid">
+      {{range $i, $row := .Grid}}
+      <div class="row">
+        {{range $j, $cell := $row}}
+        <form action="/play?level={{$.LevelRaw}}" method="POST" style="display:inline;">
+          <input type="hidden" name="col" value="{{$j}}">
+          <button type="submit" class="cell" {{if ne $.Current "R"}}disabled{{end}}>
+            {{if eq $cell "R"}}<span class="disc red"></span>
+            {{else if eq $cell "Y"}}<span class="disc yellow"></span>
+            {{else}}<span class="disc empty"></span>{{end}}
+          </button>
+        </form>
         {{end}}
       </div>
-
-      <a href="/menu" class="back-btn">⬅ Retour au menu</a>
+      {{end}}
+    </div>
+    <a href="/menu" class="back-btn">⬅ Retour au menu</a>
     {{end}}
   </div>
-
   <div class="animation-layer"></div>
   <script src="/static/script.js"></script>
 </body>
