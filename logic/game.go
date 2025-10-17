@@ -13,6 +13,7 @@ type Game struct {
 	Winner   string  
 	GameOver bool   
 	WinCells []WinPos 
+	
 }
 
 func NewGameCustom(rows, cols int) *Game {
