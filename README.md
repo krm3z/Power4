@@ -2,7 +2,7 @@
 🎯 Description
 
 Power4 Web est un projet web développé en Golang (Go) qui permet de jouer au Puissance 4 directement depuis un navigateur.
-Le jeu peut se jouer à deux en local ou contre un bot.
+Le jeu peut se jouer à deux en local ou contre un bot, avec 4 niveaux de difficulté.
 Toute la logique est gérée côté serveur avec Go, et l’interface est rendue grâce aux templates HTML et au CSS.
 
 🛠️ Technologies utilisées
@@ -19,9 +19,6 @@ POWER4/
 ├── logic/                     # Logique du jeu
 │   └── game.go
 │
-├── Power4/                    # Dossier du projet (README.md)
-│   └── README.md
-│
 ├── static/                    # Ressources statiques (images, styles, etc.)
 │   ├── img/
 │   │   └── background.jpg
@@ -36,21 +33,18 @@ POWER4/
 │   └── menu.html              # Menu principal
 │
 ├── go.mod                     # Fichier du module Go
-└── main.go                    # Serveur principal (routes + gestion du jeu)
+├── main.go                    # Serveur principal (routes, bot et gestion du jeu)
+└── README.md
 
 🚀 Installation et exécution
 1️⃣ Cloner le projet
-git clone https://github.com/ton-utilisateur/power4-web.git
-cd power4-web
+git clone https://github.com/krm3z/Power4.git
+cd Power4
 
-2️⃣ Initialiser le module Go
-go mod init power4-web
-go mod tidy
-
-3️⃣ Lancer le serveur
+2️⃣ Lancer le serveur
 go run main.go
 
-4️⃣ Ouvrir le navigateur
+3️⃣ Ouvrir le navigateur
 
 Accède à :
 👉 http://localhost:8080
@@ -59,7 +53,14 @@ Accède à :
 
 🧍 Local 2 joueurs : deux joueurs s’affrontent sur la même machine.
 
-🤖 Mode Bot : joue contre une intelligence artificielle (niveau basique).
+🤖 Mode Bot : joue contre le bot, avec 4 niveaux de difficulté. Chaque niveau a sa propre taille de grille.
+
+| Niveau | Grille | Comment joue le bot |
+|---|---|---|
+| Facile 🟢 | 6 × 7 | Il joue une colonne au hasard. |
+| Normal 🟡 | 6 × 9 | Il repère souvent un coup gagnant (6 fois sur 10), sinon il joue au hasard. |
+| Difficile 🔴 | 7 × 8 | Il anticipe 3 coups à l'avance avec l'algorithme minimax. |
+| Mode Dieu 👑 | 7 × 8 | Il anticipe 5 coups à l'avance avec minimax. |
 
 🧠 Règles du jeu
 
@@ -77,9 +78,9 @@ Si la grille est remplie sans vainqueur, la partie se termine sur une égalité.
 
 ✅ Mode 2 joueurs local
 
-✅ Gestion complète du jeu côté serveur
+✅ Mode contre le bot, avec 4 niveaux de difficulté (dont deux basés sur minimax)
 
-🔜 Amélioration de l’IA du bot
+✅ Gestion complète du jeu côté serveur
 
 🔜 Système de score et rejouabilité
 
